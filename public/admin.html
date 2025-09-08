@@ -101,12 +101,22 @@
         placeholder="Project Description"
         required
       />
-      <input
-        type="text"
-        name="image"
-        placeholder="Image Path (e.g. images/project.png)"
-        required
-      />
+      <label>Project Image</label>
+      <div
+        id="drop-area"
+        style="border: 2px dashed #ccc; padding: 20px; text-align: center"
+      >
+        Drag & Drop Image Here or Click
+        <input
+          type="file"
+          name="image"
+          id="image-input"
+          style="display: none"
+          required
+        />
+      </div>
+      <p id="uploaded-path"></p>
+
       <input
         type="url"
         name="link"
@@ -181,5 +191,6 @@
       // Load projects on page load
       loadProjects();
     </script>
+    <script src="admin.js"></script>
   </body>
 </html>
