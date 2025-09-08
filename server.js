@@ -1,0 +1,69 @@
+const multer = require('multer');
+const path = require('path');
+
+
+
+const express = require('express');
+const fs = require('fs');
+const app = express();
+const PORT = 3000;
+
+// Serve static files (HTML, CSS, images)
+app.use(express.static('public'));
+
+// API route to get projects
+app.get('/api/projects', (req, res) => {
+  fs.readFile('projects.json', 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to load projects" });
+    } else {
+      res.json(JSON.parse(data));
+    }
+  });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+app.use(express.json()); // make sure this line exists
+
+// Add new project
+app.post('/api/add-project', (req, res) => {
+  const newProject = req.body;
+
+  fs.readFile('projects.json', 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: "Failed to read projects" });
+
+    const projects = JSON.parse(data);
+    projects.push(newProject);
+
+    fs.writeFile('projects.json', JSON.stringify(projects, null, 2), (err) => {
+      if (err) return res.status(500).json({ error: "Failed to save project" });
+      res.json({ message: "Project added successfully" });
+    });
+  });
+});
+
+// Delete project by index
+app.post('/api/delete-project', (req, res) => {
+  const { index } = req.body;
+
+  fs.readFile('projects.json', 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: "Failed to read projects" });
+
+    const projects = JSON.parse(data);
+    if (index < 0 || index >= projects.length)
+      return res.status(400).json({ error: "Invalid project index" });
+
+    projects.splice(index, 1); // remove project
+
+    fs.writeFile('projects.json', JSON.stringify(projects, null, 2), (err) => {
+      if (err) return res.status(500).json({ error: "Failed to save projects" });
+      res.json({ message: "Project deleted successfully" });
+    });
+  });
+});
+
+

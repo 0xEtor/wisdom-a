@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisdom A.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="../images/profile.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"></div>
+                <div class="nav-links">
+                    <a href="#hero">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#education-skills">Skills</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>I'M WISDOM</h1>
+                <p>a programmer</p>
+                <img src="./images/techguy illustration.png" alt="tech" class="hero-image">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>HELLO.</h2>
+                    <p>I'm a developer and designer. I make websites and sometimes random experiments. Big believer in building small things that can grow big.</p>
+                </div>
+                <div class="about-image">
+                    <img src="./images/profile.png" alt="Coding workspace">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Skills Section -->
+    <section id="education-skills">
+        <div class="container">
+            <h2>MY EDUCATION & SKILLS</h2>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <span class="badge edu">EDUCATION</span>
+                    <ul>
+                        <li>GTGU-COMPUTER SCIENCE (CYBERSECURITY)</li>
+                        <li>ESKILLS4JOBS - GRAPHIC DESIGNING</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <span class="badge exp">EXPERIENCE</span>
+                    <ul>
+                        <li>EMPLOYEE AT A PRINT STARTUP 2022–2024</li>
+                        <li>WEB DEVELOPEMENT (SELF-TAUGHT) 2021–present</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-category">
+                    <span class="badge skill">SKILLS</span>
+                    <ul>
+                        <li>HTML, CSS and JAVASCRIPT (STILL LEARNING)</li>
+                        <li>ADOBE PHOTOSHOP, PIXELLAB, CANVA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+  <div class="container">
+    <h2>MY PROJECTS</h2>
+    <div class="projects-container" id="projects-container">
+      <!-- Projects will load here -->
+    </div>
+  </div>
+</section>
+
+<script>
+  async function loadProjects() {
+    try {
+      const res = await fetch('/api/projects');
+      const projects = await res.json();
+      const container = document.getElementById('projects-container');
+
+      projects.forEach(p => {
+        const card = document.createElement('div');
+        card.classList.add('project-card');
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.title}">
+          <h3>${p.title}</h3>
+          <p>${p.description}</p>
+          <a href="${p.link}" target="_blank">View Project</a>
+        `;
+        container.appendChild(card);
+      });
+    } catch (error) {
+      console.error("Error loading projects", error);
+    }
+  }
+  loadProjects();
+</script>
+
+
+    <section id="contact">
+  <div class="container contact-grid">
+    
+    <!-- Left: Email Button -->
+    <div class="contact-left">
+      <a href="mailto:wisdom.e.alornyo@gmail.com" class="email-btn">
+        <i class="fas fa-envelope"></i>
+        wisdom.e.alornyo@gmail.com
+      </a>
+    </div>
+
+    <!-- Right: Connect Text -->
+    <div class="contact-right">
+      <h3>CONNECT WITH ME</h3>
+      <p>
+        Need help on bringing your next project to life?<br>
+        Contact me via Gmail, let’s plan it together!
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Social Icons -->
+  <div class="social-icons">
+    <a href="https://www.linkedin.com/in/0xetor/"><i class="fab fa-linkedin"></i></a>
+    <a href="https://github.com/0xEtor"><i class="fab fa-github"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+  </div>
+</section>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Wisdom. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

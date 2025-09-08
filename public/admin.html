@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Projects</title>
+    <style>
+      button[type="submit"] {
+        width: auto; /* don’t stretch full width */
+        padding: 10px 25px; /* make it a nice size */
+        display: block; /* so we can center it */
+        margin: 0 auto 10px; /* center horizontally and keep bottom margin */
+        background-color: #ff8040;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #ff9933;
+      }
+
+      form {
+        background-color: #fff8f0;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      input,
+      button {
+        padding: 12px;
+        font-size: 1rem;
+        width: 100%;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+
+      button {
+        background-color: #ff8040;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #ff9933;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      form,
+      .project-list {
+        max-width: 500px;
+        margin: auto;
+        margin-bottom: 40px;
+      }
+      input,
+      button {
+        padding: 10px;
+        font-size: 1rem;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      button {
+        background-color: #ff8040;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #ff9933;
+      }
+      .project-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .project-item button {
+        width: auto;
+        padding: 5px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1></h1>
+
+    <!-- Add Project Form -->
+    <form id="project-form">
+      <input type="text" name="title" placeholder="Project Title" required />
+      <input
+        type="text"
+        name="description"
+        placeholder="Project Description"
+        required
+      />
+      <input
+        type="text"
+        name="image"
+        placeholder="Image Path (e.g. images/project.png)"
+        required
+      />
+      <input
+        type="url"
+        name="link"
+        placeholder="Project Link (https://...)"
+        required
+      />
+      <button type="submit">Add Project</button>
+    </form>
+
+    <!-- Existing Projects List -->
+    <h2></h2>
+    <div id="project-list"></div>
+
+    <script>
+      const form = document.getElementById("project-form");
+      const list = document.getElementById("project-list");
+
+      // Load existing projects
+      async function loadProjects() {
+        const res = await fetch("/api/projects");
+        const projects = await res.json();
+        list.innerHTML = "";
+
+        projects.forEach((p, index) => {
+          const div = document.createElement("div");
+          div.classList.add("project-item");
+          div.innerHTML = `
+          <span>${p.title}</span>
+          <button onclick="deleteProject(${index})">Delete</button>
+        `;
+          list.appendChild(div);
+        });
+      }
+
+      // Add project
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const project = Object.fromEntries(formData.entries());
+
+        const res = await fetch("/api/add-project", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(project),
+        });
+
+        if (res.ok) {
+          alert("Project added!");
+          form.reset();
+          loadProjects(); // refresh list
+        } else {
+          alert("Failed to add project.");
+        }
+      });
+
+      // Delete project
+      async function deleteProject(index) {
+        const res = await fetch("/api/delete-project", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ index }),
+        });
+
+        if (res.ok) {
+          alert("Project deleted!");
+          loadProjects(); // refresh list
+        } else {
+          alert("Failed to delete project.");
+        }
+      }
+
+      // Load projects on page load
+      loadProjects();
+    </script>
+  </body>
+</html>
