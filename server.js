@@ -65,5 +65,6 @@ app.post('/api/delete-project', (req, res) => {
     });
   });
 });
+app.use(express.static('public'));
 
 
